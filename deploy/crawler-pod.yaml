@@ -1,0 +1,35 @@
+  apiVersion: v1
+  kind: Pod
+  metadata:
+    name: kube-crawler-instance
+    namespace: default
+    labels:
+      app: kube-crawler
+  spec:
+    serviceAccountName: kube-crawler
+    serviceAccount: kube-crawler
+    containers:
+      -
+        name: crawler
+        image: quay.io/openshift/origin-cli:4.5.0
+        imagePullPolicy: IfNotPresent
+        command:
+          - /bin/sh
+          - '-c'
+          - |
+            while true; do
+            for ns in `kubectl get namespaces --no-headers | awk '{ print $1; }'`; do 
+             echo "Namespace: ${ns}, checking Pods"
+              for pod in `kubectl get pods -n ${ns} --no-headers | awk '{ print $1; }'`; do
+                for image in `kubectl get pod ${pod} -n ${ns} -o=jsonpath='{.spec.containers[*].image}'`; do
+                  echo  "\tPod: ${pod}, namespace: ${ns}, image: ${image}"
+                done
+              done
+            done
+            sleep 30s
+            echo "Still running..."
+            done
+        resources:
+          limits:
+            cpu: "1"
+            memory: "1G"
