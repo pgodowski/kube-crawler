@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: open-liberty-test1
+  namespace: default
+  labels:
+    app: sample
+spec:
+   containers:
+     -
+       name: open-liberty
+       image: open-liberty
+       imagePullPolicy: Always
+       resources:
+        limits:
+          cpu: "600m"
