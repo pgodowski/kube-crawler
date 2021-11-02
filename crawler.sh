@@ -25,7 +25,8 @@ spec:
       restartPolicy: Never
   backoffLimit: 1
 EOF
-# TODO: do something with scan resultss
+# TODO: consolidate scan results
+# TODO: do something with scan results
         done
     done
 done
